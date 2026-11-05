@@ -82,17 +82,20 @@ void Fabrica::desenhaNaEcra(Ecra &ecra) const {
     ecra.limpa();
 
     int alturaMoldura = linhas + 3;
-    int larguraFabrica = colunas + 4;
+    int larguraFabrica = colunas + 5; // Aumentado para acomodar perfeitamente a régua e o limite direito
     ecra.desenhaMoldura(0, 0, alturaMoldura, larguraFabrica);
 
-    // Régua horizontal superior (A, B, C...)[cite: 27, 29]
-    ecra.posiciona(1, 2);
+    // Régua horizontal superior (A, B, C...) alinhada exatamente com as colunas da grelha (começa na coluna 3)
+    ecra.posiciona(1, 3);
     for (int j = 0; j < colunas; j++) {
         char letraCol = 'A' + j;
         ecra.escreve(letraCol);
     }
+    // Fechar a moldura superior corretamente após a régua
+    ecra.posiciona(1, larguraFabrica - 1);
+    ecra.escreve('|');
 
-    // Régua vertical lateral (A, B, C...) e conteúdo da grelha[cite: 27, 29]
+    // Régua vertical lateral (A, B, C...) e conteúdo da grelha
     for (int i = 0; i < linhas; i++) {
         ecra.posiciona(2 + i, 1);
         char letraLinha = 'A' + i;
@@ -139,10 +142,9 @@ string Fabrica::obtemInfoPosicao(int lStart, int cStart, int raio) const {
     // Percorre o quadrado de raio centralizado em (lStart, cStart)
     for (int l = lStart - raio; l <= lStart + raio; ++l) {
         for (int c = cStart - raio; c <= cStart + raio; ++c) {
-            // Verifica se está dentro dos limites da fábrica criada
             if (l >= 0 && l < linhas && c >= 0 && c < colunas) {
                 const Posicao &pos = grelha[l][c];
-                char letraL = 'A' + l; // Conforme a régua em maiúsculas ou minúsculas (ajustado ao formato visual)
+                char letraL = 'A' + l;
                 char letraC = 'A' + c;
 
                 ss << "Posicao " << letraL << letraC << ": ";
