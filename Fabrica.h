@@ -27,7 +27,7 @@ public:
     void inicializaAleatorio();
     void desenhaNaEcra(Ecra &ecra) const;
 
-    string obtemInfoPosicao(int l, int c) const;
+    string obtemInfoPosicao(int l, int c, int raio = 0) const;
 
     int getInstante() const;
     int getCreditos() const;

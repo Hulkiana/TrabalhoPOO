@@ -133,19 +133,30 @@ void Fabrica::desenhaNaEcra(Ecra &ecra) const {
     }
 }
 
-string Fabrica::obtemInfoPosicao(int l, int c) const {
-    if (l < 0 || l >= linhas || c < 0 || c >= colunas) return "Posicao invalida.";
-
+string Fabrica::obtemInfoPosicao(int lStart, int cStart, int raio) const {
     stringstream ss;
-    const Posicao &pos = grelha[l][c];
-    ss << "Posicao [" << (char)('a' + l) << (char)('a' + c) << "]: ";
 
-    switch (pos.getTipo()) {
-        case VAZIO: ss << "Solo vazio."; break;
-        case CRATERA: ss << "Cratera (#)."; break;
-        case DEPOSITO_FERRO: ss << "Deposito de ferro (%), quantidade: " << pos.getQuantidade(); break;
-        case DEPOSITO_SILICIO: ss << "Deposito de silicio ($), quantidade: " << pos.getQuantidade(); break;
-        case DEPOSITO_GELO: ss << "Deposito de gelo (~), quantidade: " << pos.getQuantidade(); break;
+    // Percorre o quadrado de raio centralizado em (lStart, cStart)
+    for (int l = lStart - raio; l <= lStart + raio; ++l) {
+        for (int c = cStart - raio; c <= cStart + raio; ++c) {
+            // Verifica se está dentro dos limites da fábrica criada
+            if (l >= 0 && l < linhas && c >= 0 && c < colunas) {
+                const Posicao &pos = grelha[l][c];
+                char letraL = 'A' + l; // Conforme a régua em maiúsculas ou minúsculas (ajustado ao formato visual)
+                char letraC = 'A' + c;
+
+                ss << "Posicao " << letraL << letraC << ": ";
+
+                switch (pos.getTipo()) {
+                    case VAZIO: ss << "solo"; break;
+                    case CRATERA: ss << "cratera"; break;
+                    case DEPOSITO_FERRO: ss << "deposito de ferro (" << pos.getQuantidade() << " unidades)"; break;
+                    case DEPOSITO_SILICIO: ss << "deposito de silicio (" << pos.getQuantidade() << " unidades)"; break;
+                    case DEPOSITO_GELO: ss << "deposito de gelo (" << pos.getQuantidade() << " unidades)"; break;
+                }
+                ss << "\n";
+            }
+        }
     }
     return ss.str();
 }
